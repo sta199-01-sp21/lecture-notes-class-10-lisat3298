@@ -1,7 +1,7 @@
 ---
 title: "Introduction to probability"
-author: ""
-date: ""
+author: "Lisa Tang"
+date: "2/25/2021"
 output: html_document
 editor_options: 
   chunk_output_type: console
@@ -50,16 +50,26 @@ xtabs(~ Treatment + Improved, data = Arthritis) %>%
 
 - How many patients were enrolled in the clinical trial?
 
+84 patients were enrolled in the clinical trial
+
 - What is the probability a randomly selected patient received the placebo?
+
+The probability a randomly selected patient received the placebo is 43/84 ~ 51.2%.
 
 - What is the probability a randomly selected patient received the placebo
   and had a marked improvement?
   
+The probability a randomly selected patient received the placebo and had a marked improvement is 7/84 ~ 8.33%.
+  
 - What is the probability a randomly selected patient received the placebo
   and the treatment?
   
+The probability a randomly selected patient received the placebo and the treatment is 0/84 ~ 0%.
+  
 - What is the probability a randomly selected patient had some improvement or
   was on the treatment?
+  
+The probability a randomly selected patient had some improvement or was on the treatment is 43 + 7 = 50/84 ~ 59.5%.
 
 ## Using computer simulations to calculate probabilities
 
@@ -101,6 +111,8 @@ prop.table(counts)
 ```
 
 How close is this value to the "true" probability?
+
+As the size increases, the values grow closer to the "true" probability.
 
 **To summarize our process:**
 
@@ -157,17 +169,29 @@ Perform a simulation to compute this empirical probability.
 
 Write down your guess to the answer before you calculate it.
 
+Guess: it will be more likely for the absolute value of the difference between dice roll 1 and dice roll 2 to be equal to 4.
+
 ```{r simulate_rolls}
+roll_results <- tibble (
+  die_1 = replicate(n = 1000, expr = sample(1:6, size = 1)),
+  die_2 = replicate(n = 1000, expr = sample(1:6, size = 1))
+)
 
 ```
 
 ```{r identify_events}
-
+roll_results <- roll_results %>% 
+  mutate(event_1 = die_1^2 == die_2,
+         event_2 = abs(die_1 - die_2) == 4)
 ```
 
 ```{r summarize_rolls}
-
+roll_results %>% 
+  summarise(event_1_prob = mean(event_1),
+            event_2_prob = mean(event_2))
 ```
+
+Event 2 is more likely, meaning it will be more likely for the absolute value of the difference between dice roll 1 and dice roll 2 to be equal to 4 (almost 2x as likely).
 
 ## Additional Resources-please look at before Weds.
 
